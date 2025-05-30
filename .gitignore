@@ -50,6 +50,8 @@ data/*.xlsx
 data/*.json
 !data/processed_data.csv
 
+./data
+
 # Results
 results/*.png
 results/*.txt
