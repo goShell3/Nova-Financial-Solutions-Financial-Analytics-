@@ -1,5 +1,69 @@
-./venv
-./data
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Distribution
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data
+data/
+data/*.csv
+data/*.xlsx
+data/*.json
+data/raw_analyst_ratings/
+data/yfinance_data/
+
+# Results
+results/*.png
+results/*.txt
+!results/.gitkeep
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
 data/raw_analyst_ratings/raw_analyst_ratings.csv
 *.csv
 
