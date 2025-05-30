@@ -45,12 +45,12 @@ build/
 .ipynb_checkpoints
 
 # Data
+data/
 data/*.csv
 data/*.xlsx
 data/*.json
-!data/processed_data.csv
-
-./data
+data/raw_analyst_ratings/
+data/yfinance_data/
 
 # Results
 results/*.png
