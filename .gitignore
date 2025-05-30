@@ -1,3 +1,5 @@
 ./venv
 ./data
+data/raw_analyst_ratings/raw_analyst_ratings.csv
+*.csv
 
