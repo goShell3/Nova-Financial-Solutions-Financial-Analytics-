@@ -1,75 +1,47 @@
-# To use TA-Lib, you need to install its C library first.
-# You can download and install it using:
-# wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
-# tar -xzvf ta-lib-0.4.0-src.tar.gz
-# cd ta-lib
-# ./configure --prefix=/usr
-# make
-# sudo make install
-
-import talib as ta
-import pynance as pn
-from typing import List, Dict, Union
 import pandas as pd
-
+import numpy as np
 
 class TechnicalIndicators:
     
     def __init__(self, ohlc: pd.DataFrame):
         """
         Initialize with OHLC data.
-        
-        :param ohlc: DataFrame containing Open, High, Low, Close prices.
         """
         self.ohlc = ohlc
-        self.close = ohlc['Close'].values
-        self.high = ohlc['High'].values
-        self.low = ohlc['Low'].values
-        self.open = ohlc['Open'].values
-        self.volume = ohlc['Volume'].values if 'Volume' in ohlc.columns else None
+        self.close = ohlc['Close']
+        self.high = ohlc['High']
+        self.low = ohlc['Low']
+        self.open = ohlc['Open']
+        self.volume = ohlc['Volume'] if 'Volume' in ohlc.columns else None
         
     def moving_average(self, period: int) -> pd.Series:
-        """Calculate the moving average for a given period.
-        This method calculates the simple moving average (SMA) for the closing prices over a specified period.
-
-        Args:
-            period (int): The number of periods over which to calculate the moving average.
-
-        Returns:
-            pd.Series: A pandas Series containing the moving average values.
-        """
-        
-        return pd.Series(ta.SMA(self.close, timeperiod=period), name=f'SMA_{period}', index=self.ohlc.index)
+        """Simple Moving Average (SMA)"""
+        return self.close.rolling(window=period).mean().rename(f'SMA_{period}')
     
     def relative_strength_index(self, period: int) -> pd.Series:
-        """Calculate the Relative Strength Index (RSI) for a given period.
+        """Relative Strength Index (RSI)"""
+        delta = self.close.diff()
+        gain = delta.where(delta > 0, 0)
+        loss = -delta.where(delta < 0, 0)
         
-        Args:
-            period (int): The number of periods over which to calculate the RSI.
+        avg_gain = gain.rolling(window=period).mean()
+        avg_loss = loss.rolling(window=period).mean()
         
-        Returns:
-            pd.Series: A pandas Series containing the RSI values.
-        """
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
         
-        return pd.Series(ta.RSI(self.close, timeperiod=period), name=f'RSI_{period}', index=self.ohlc.index)
+        return rsi.rename(f'RSI_{period}')
     
     def moving_average_convergence_divergence(self, fastperiod: int = 12, slowperiod: int = 26, signalperiod: int = 9) -> pd.DataFrame:
-        """Calculate the Moving Average Convergence Divergence (MACD).
+        """MACD, Signal Line, MACD Histogram"""
+        ema_fast = self.close.ewm(span=fastperiod, adjust=False).mean()
+        ema_slow = self.close.ewm(span=slowperiod, adjust=False).mean()
+        macd = ema_fast - ema_slow
+        signal = macd.ewm(span=signalperiod, adjust=False).mean()
+        hist = macd - signal
         
-        Args:
-            fastperiod (int): The period for the fast EMA.
-            slowperiod (int): The period for the slow EMA.
-            signalperiod (int): The period for the signal line.
-        
-        Returns:
-            pd.DataFrame: A DataFrame containing MACD, Signal Line, and MACD Histogram.
-        """
-        
-        macd, macdsignal, macdhist = ta.MACD(self.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
         return pd.DataFrame({
             'MACD': macd,
-            'Signal_Line': macdsignal,
-            'MACD_Histogram': macdhist
+            'Signal_Line': signal,
+            'MACD_Histogram': hist
         }, index=self.ohlc.index)
-        
-    

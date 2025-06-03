@@ -51,6 +51,8 @@ data/*.xlsx
 data/*.json
 data/raw_analyst_ratings/
 data/yfinance_data/
+/data
+./data
 
 # Results
 results/*.png
@@ -71,3 +73,5 @@ data/raw_analyst_ratings/raw_analyst_ratings.csv
 # config
 /ta-lib
 /tablib-0.9.2 
+
+./*.png
