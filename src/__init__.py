@@ -4,6 +4,8 @@ from .outlier import iqr_outliers, z_score_outliers
 # from .timeseries import plot_rolling_stats
 
 
+from .technical_indicators import TechnicalIndicators
+
 __all__ = [
     'plot_correlation_matrix',
     'plot_distribution',
@@ -11,4 +13,6 @@ __all__ = [
     'z_score_outliers',
     # 'analyze_missingness',
     # 'plot_rolling_stats'
+    
+    'TechnicalIndicators'
 ]
