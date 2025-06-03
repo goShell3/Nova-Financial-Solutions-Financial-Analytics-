@@ -2,4 +2,12 @@
 Financial Analytics Module
 """
 
-__version__ = '0.1.0'
+# src/__init__.py
+from .eda import * 
+from .textanalysis import *
+from .datacleaning import *
+from .analytics import *
+
+__all__ = {
+
+}
